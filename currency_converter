@@ -1,0 +1,85 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+# Function to fetch the exchange rate
+def get_exchange_rate(base_currency, target_currency):
+    exchange_rates = {
+        "USD": {"INR": 83.50, "EUR": 0.92, "GBP": 0.80, "JPY": 134.50, "CHF": 0.91, "CAD": 1.34, "AUD": 1.50, "NZD": 1.63, "ZAR": 18.70},
+        "INR": {"USD": 0.012, "EUR": 0.011, "GBP": 0.0096, "JPY": 1.61, "CHF": 0.011, "CAD": 0.016, "AUD": 0.018, "NZD": 0.019, "ZAR": 0.22},
+        "EUR": {"USD": 1.09, "INR": 91.00, "GBP": 0.87, "JPY": 146.32, "CHF": 0.99, "CAD": 1.46, "AUD": 1.62, "NZD": 1.77, "ZAR": 20.30},
+        "GBP": {"USD": 1.25, "INR": 104.00, "EUR": 1.15, "JPY": 168.52, "CHF": 1.13, "CAD": 1.68, "AUD": 1.87, "NZD": 2.03, "ZAR": 23.40},
+        "JPY": {"USD": 0.0074, "INR": 0.62, "EUR": 0.0068, "GBP": 0.0059, "CHF": 0.0067, "CAD": 0.0099, "AUD": 0.010, "NZD": 0.011, "ZAR": 0.13},
+        "CHF": {"USD": 1.10, "INR": 92.00, "EUR": 1.01, "GBP": 0.88, "JPY": 149.11, "CAD": 1.49, "AUD": 1.66, "NZD": 1.81, "ZAR": 19.90},
+        "CAD": {"USD": 0.75, "INR": 61.00, "EUR": 0.68, "GBP": 0.60, "JPY": 110.11, "CHF": 0.67, "AUD": 1.12, "NZD": 1.22, "ZAR": 14.00},
+        "AUD": {"USD": 0.67, "INR": 55.00, "EUR": 0.62, "GBP": 0.54, "JPY": 98.00, "CHF": 0.60, "CAD": 0.89, "NZD": 1.09, "ZAR": 12.50},
+        "NZD": {"USD": 0.61, "INR": 51.00, "EUR": 0.56, "GBP": 0.49, "JPY": 91.00, "CHF": 0.55, "CAD": 0.82, "AUD": 0.91, "ZAR": 11.60},
+        "ZAR": {"USD": 0.053, "INR": 4.46, "EUR": 0.049, "GBP": 0.043, "JPY": 7.58, "CHF": 0.050, "CAD": 0.071, "AUD": 0.080, "NZD": 0.086},
+    }
+
+    if base_currency in exchange_rates and target_currency in exchange_rates[base_currency]:
+        return exchange_rates[base_currency][target_currency]
+    else:
+        return None
+
+# Function to handle currency conversion
+def convert_currency():
+    base_currency = base_currency_var.get()
+    target_currency = target_currency_var.get()
+    amount = amount_entry.get()
+
+    # Validate input
+    try:
+        amount = float(amount)
+        if amount < 0:
+            raise ValueError("Amount cannot be negative.")
+    except ValueError:
+        messagebox.showerror("Invalid Input", "Please enter a valid positive number for the amount.")
+        return
+
+    # Get exchange rate
+    exchange_rate = get_exchange_rate(base_currency, target_currency)
+    if exchange_rate is not None:
+        converted_amount = amount * exchange_rate
+        result_label.config(text=f"{amount:.2f} {base_currency} = {converted_amount:.2f} {target_currency}")
+    else:
+        messagebox.showerror("Error", "Exchange rate not available for the selected currencies.")
+
+# Create the main application window
+root = tk.Tk()
+root.title("Currency Converter")
+root.geometry("400x400")
+
+# Header Label
+header_label = tk.Label(root, text="Currency Converter", font=("Helvetica", 16))
+header_label.pack(pady=10)
+
+# Amount Input
+amount_label = tk.Label(root, text="Amount:")
+amount_label.pack()
+amount_entry = tk.Entry(root, width=20)
+amount_entry.pack()
+
+# Base Currency Selection
+base_currency_label = tk.Label(root, text="From Currency:")
+base_currency_label.pack()
+base_currency_var = tk.StringVar(value="USD")
+base_currency_menu = ttk.Combobox(root, textvariable=base_currency_var, values=["USD", "INR", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "ZAR"])
+base_currency_menu.pack()
+
+# Target Currency Selection
+target_currency_label = tk.Label(root, text="To Currency:")
+target_currency_label.pack()
+target_currency_var = tk.StringVar(value="INR")
+target_currency_menu = ttk.Combobox(root, textvariable=target_currency_var, values=["USD", "INR", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "ZAR"])
+target_currency_menu.pack()
+
+# Convert Button
+convert_button = tk.Button(root, text="Convert", command=convert_currency)
+convert_button.pack(pady=10)
+
+# Result Label
+result_label = tk.Label(root, text="", font=("Helvetica", 14), fg="blue")
+result_label.pack(pady=10)
+
+# Run the application
+root.mainloop()
