@@ -22,7 +22,7 @@ This is a simple currency converter application built using Python and the `tkin
 1.  Clone the repository:
 
     ```bash
-    git clone <>
+    git clone <https://github.com/SUPRIYA410/currency_converter-project-for-Micro-IT/tree/main>
     cd <currency_converter-project-for-Micro-IT>
     ```
 
