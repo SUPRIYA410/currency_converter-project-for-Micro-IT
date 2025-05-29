@@ -1,4 +1,4 @@
-# currency_converter-project-for-Micro-IT
+# currency_converter
 # Currency Converter
 
 This is a simple currency converter application built using Python and the `tkinter` library for the graphical user interface.  It allows users to convert amounts between different currencies.
